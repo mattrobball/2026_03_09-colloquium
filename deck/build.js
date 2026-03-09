@@ -148,44 +148,31 @@ function addPanel(slide, title, lines, box, fillColor = COLORS.panel) {
   });
 }
 
-function imageExists(p) {
-  return Boolean(p) && fs.existsSync(p);
-}
-
-function addImageOrPlaceholder(slide, assetPath, box, label) {
-  if (imageExists(assetPath)) {
-    slide.addImage({
-      path: assetPath,
-      x: box.x,
-      y: box.y,
-      w: box.w,
-      h: box.h,
-      sizing: { type: "contain", x: box.x, y: box.y, w: box.w, h: box.h },
-    });
-    slide.addShape(pptx.ShapeType.rect, {
-      x: box.x,
-      y: box.y,
-      w: box.w,
-      h: box.h,
-      fill: { color: "FFFFFF", transparency: 100 },
-      line: { color: COLORS.border, pt: 0.75 },
-    });
-    return;
-  }
-
-  slide.addShape(pptx.ShapeType.roundRect, {
+function addImageOrPlaceholder(slide, _assetPath, box, label) {
+  slide.addShape(pptx.ShapeType.rect, {
     x: box.x,
     y: box.y,
     w: box.w,
     h: box.h,
-    fill: { color: COLORS.panelAlt },
+    fill: { color: "FFFFFF" },
     line: { color: COLORS.border, pt: 1 },
+  });
+  slide.addText("Figure placeholder", {
+    x: box.x + 0.18,
+    y: box.y + 0.16,
+    w: box.w - 0.36,
+    h: 0.2,
+    fontFace: FONTS.body,
+    fontSize: 11,
+    color: COLORS.muted,
+    bold: true,
+    margin: 0,
   });
   slide.addText(label, {
     x: box.x + 0.18,
-    y: box.y + 0.22,
+    y: box.y + 0.45,
     w: box.w - 0.36,
-    h: box.h - 0.44,
+    h: box.h - 0.68,
     fontFace: FONTS.body,
     fontSize: 16,
     color: COLORS.muted,
@@ -412,7 +399,7 @@ function slide2() {
     "Recent systems are much stronger at mathematics than they were even a year ago.",
     "Some now perform impressively on demanding benchmarks.",
     "But capability and trust are not the same question.",
-  ], { y: 1.5, w: 8.1, h: 2.8, fontSize: 21 });
+  ], { x: 0.95, y: 1.55, w: 10.7, h: 2.8, fontSize: 21 });
 }
 
 function slide3() {
@@ -422,12 +409,12 @@ function slide3() {
     "Benchmark results in mathematics are improving quickly.",
     "Systems are also beginning to contribute, at least in limited ways, to research-level work.",
     "So the question is no longer speculative.",
-  ], { y: 1.5, w: 8.8, h: 3.0, fontSize: 20 });
+  ], { x: 0.95, y: 1.55, w: 10.75, h: 2.8, fontSize: 20 });
   addQuoteBox(slide, "Need concrete examples here: one benchmark example and one research-adjacent example.", {
     x: 0.95,
-    y: 5.55,
-    w: 6.6,
-    h: 0.9,
+    y: 4.85,
+    w: 8.8,
+    h: 1.0,
   });
 }
 
@@ -438,7 +425,7 @@ function slide4() {
     "For a working mathematician, the issue is practical rather than philosophical:",
     "when I do not know the answer, can this help me without wasting time",
     "or creating false confidence?",
-  ], { y: 1.55, w: 8.9, h: 3.0, fontSize: 20 });
+  ], { x: 0.95, y: 1.55, w: 10.8, h: 3.0, fontSize: 20 });
 }
 
 function slide5() {
@@ -472,34 +459,34 @@ function slide6() {
 function slide7() {
   const slide = pptx.addSlide();
   addTitle(slide, "Two recent tests", 7);
-  addImageOrPlaceholder(slide, ASSETS.archon, { x: 0.95, y: 1.55, w: 5.15, h: 3.45 }, "First Proof image");
-  addImageOrPlaceholder(slide, ASSETS.frontiermath, { x: 6.3, y: 1.55, w: 5.25, h: 3.45 }, "FrontierMath image or leaderboard");
+  addImageOrPlaceholder(slide, ASSETS.archon, { x: 0.95, y: 1.7, w: 5.35, h: 3.55 }, "First Proof figure");
+  addImageOrPlaceholder(slide, ASSETS.frontiermath, { x: 6.45, y: 1.7, w: 5.35, h: 3.55 }, "FrontierMath figure");
   addBodyText(slide, [
     "These two examples ask rather different questions.",
     "Together they give a useful picture of recent progress.",
-  ], { x: 0.95, y: 5.3, w: 8.5, h: 0.8, fontSize: 18 });
+  ], { x: 0.95, y: 5.55, w: 10.8, h: 0.7, fontSize: 18 });
 }
 
 function slide8() {
   const slide = pptx.addSlide();
   addTitle(slide, "First Proof", 8);
-  addImageOrPlaceholder(slide, ASSETS.archon, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "First Proof / Archon figure");
   addBodyText(slide, [
     "First Proof evaluates olympiad-style proof generation.",
     "This is still an artificial setting, but it is at least recognizable mathematics.",
     "It asks for sustained reasoning, not just short-answer pattern matching.",
-  ], { x: 7.3, y: 1.55, w: 5.0, h: 3.6, fontSize: 18 });
+  ], { x: 0.95, y: 1.5, w: 11.1, h: 1.55, fontSize: 18 });
+  addImageOrPlaceholder(slide, ASSETS.archon, { x: 0.95, y: 3.35, w: 11.1, h: 2.5 }, "Insert First Proof figure");
 }
 
 function slide9() {
   const slide = pptx.addSlide();
   addTitle(slide, "FrontierMath", 9);
-  addImageOrPlaceholder(slide, ASSETS.frontiermath, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "Insert FrontierMath figure or Tier 4 leaderboard");
   addBodyText(slide, [
     "FrontierMath was designed to probe much harder mathematics.",
     "Its harder tiers aim beyond standard benchmark questions",
     "and are meant to resist superficial pattern matching.",
-  ], { x: 7.3, y: 1.55, w: 5.0, h: 3.6, fontSize: 18 });
+  ], { x: 0.95, y: 1.5, w: 11.1, h: 1.55, fontSize: 18 });
+  addImageOrPlaceholder(slide, ASSETS.frontiermath, { x: 0.95, y: 3.35, w: 11.1, h: 2.5 }, "Insert FrontierMath figure or Tier 4 leaderboard");
 }
 
 function slide10() {
@@ -577,17 +564,17 @@ function slide10() {
 function slide11() {
   const slide = pptx.addSlide();
   addTitle(slide, "On pass@X", 11);
-  addImageOrPlaceholder(slide, ASSETS.repeatedSampling, { x: 0.95, y: 1.45, w: 6.4, h: 4.2 }, "Repeated sampling paper figure");
   addBodyText(slide, [
     "If one allows many tries, success rates can rise dramatically.",
     "But eventual success after repeated sampling is not the same thing",
     "as a system that is reliable on the first few serious attempts.",
-  ], { x: 7.55, y: 1.55, w: 4.85, h: 2.7, fontSize: 18 });
+  ], { x: 0.95, y: 1.5, w: 11.0, h: 1.55, fontSize: 18 });
+  addImageOrPlaceholder(slide, ASSETS.repeatedSampling, { x: 0.95, y: 3.05, w: 9.0, h: 2.65 }, "Insert repeated-sampling figure from arXiv:2407.21787");
   slide.addText("1 - (1 - p)^X", {
-    x: 8.2,
-    y: 4.55,
-    w: 2.6,
-    h: 0.35,
+    x: 10.2,
+    y: 4.15,
+    w: 1.95,
+    h: 0.38,
     fontFace: FONTS.body,
     fontSize: 20,
     italic: true,
@@ -616,8 +603,8 @@ function slide13() {
     "A system can solve many tasks on average and still be an unreliable tool in practice.",
     "So for mathematics, we should ask not only how often a model succeeds,",
     "but how to benchmark reliability itself.",
-  ], { x: 0.95, y: 1.55, w: 5.35, h: 3.8, fontSize: 18 });
-  addImageOrPlaceholder(slide, ASSETS.reliability, { x: 6.55, y: 1.45, w: 5.9, h: 4.25 }, "Reliability figure");
+  ], { x: 0.95, y: 1.5, w: 11.0, h: 1.85, fontSize: 18 });
+  addImageOrPlaceholder(slide, ASSETS.reliability, { x: 0.95, y: 3.55, w: 11.1, h: 2.15 }, "Insert reliability figure from arXiv:2602.16666v1");
 }
 
 function slide14() {
@@ -654,26 +641,30 @@ function slide15() {
 function slide16() {
   const slide = pptx.addSlide();
   addTitle(slide, "Verification changes the picture", 16);
-  addImageOrPlaceholder(slide, ASSETS.alphaSetup, { x: 0.95, y: 1.45, w: 6.1, h: 4.2 }, "AlphaEvolve setup figure");
   addBodyText(slide, [
     "The most impressive current systems do not ignore unreliability.",
     "They put generation inside a loop of testing, scoring, and selection.",
     "AlphaEvolve is a good example of this.",
-  ], { x: 7.25, y: 1.6, w: 5.0, h: 3.1, fontSize: 18 });
+  ], { x: 0.95, y: 1.5, w: 11.0, h: 1.55, fontSize: 18 });
+  addImageOrPlaceholder(slide, ASSETS.alphaSetup, { x: 0.95, y: 3.3, w: 11.1, h: 2.6 }, "Insert AlphaEvolve setup figure");
 }
 
 function slide17() {
   const slide = pptx.addSlide();
   addTitle(slide, "AlphaEvolve", 17);
-  addImageOrPlaceholder(slide, ASSETS.alphaHighlights, { x: 0.95, y: 1.45, w: 5.85, h: 4.2 }, "AlphaEvolve highlights figure");
+  addBodyText(slide, [
+    "This approach is strongest when progress can be automatically evaluated.",
+    "The most interesting feature is not generation by itself, but generation inside a loop of testing and selection.",
+  ], { x: 0.95, y: 1.5, w: 11.0, h: 1.3, fontSize: 18 });
+  addImageOrPlaceholder(slide, ASSETS.alphaHighlights, { x: 0.95, y: 3.05, w: 6.1, h: 2.75 }, "Insert AlphaEvolve results figure");
   addPanel(slide, "Highlights", [
     "4 x 4 complex matrix multiplication in 48 scalar multiplications.",
     "Matched best known constructions on many mathematical problems.",
     "Improved prior state of the art on a meaningful subset.",
-  ], { x: 7.05, y: 1.6, w: 5.25, h: 2.7 }, COLORS.panelAlt);
+  ], { x: 7.35, y: 3.05, w: 4.7, h: 2.75 }, COLORS.panelAlt);
   addBodyText(slide, [
     "The larger lesson is that verification or testing can make these systems much more useful.",
-  ], { x: 7.15, y: 4.65, w: 4.9, h: 0.9, fontSize: 17, italic: true });
+  ], { x: 0.95, y: 5.95, w: 10.9, h: 0.45, fontSize: 17, italic: true });
 }
 
 function slide18() {
@@ -775,16 +766,16 @@ function slide22() {
 function slide23() {
   const slide = pptx.addSlide();
   addTitle(slide, "Urban and Megalodon", 23);
-  addImageOrPlaceholder(slide, ASSETS.urbanPaper, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "Insert Urban / Megalodon figure or workflow image");
   addBodyText(slide, [
     "This is one of the clearest recent demonstrations of serious autoformalization.",
     "The workflow is no longer merely aspirational.",
     "Strong models can now support a substantial formalization loop.",
-  ], { x: 7.2, y: 1.6, w: 5.05, h: 3.0, fontSize: 18 });
+  ], { x: 0.95, y: 1.5, w: 11.0, h: 1.55, fontSize: 18 });
+  addImageOrPlaceholder(slide, ASSETS.urbanPaper, { x: 0.95, y: 3.3, w: 11.1, h: 2.35 }, "Insert Urban / Megalodon figure or workflow image");
   slide.addText("Josef Urban, “130k Lines of Formal Topology in Two Weeks”", {
     x: 0.95,
-    y: 5.78,
-    w: 6.2,
+    y: 5.92,
+    w: 7.0,
     h: 0.24,
     fontFace: FONTS.body,
     fontSize: 11,
@@ -796,16 +787,16 @@ function slide23() {
 function slide24() {
   const slide = pptx.addSlide();
   addTitle(slide, "Gauss and sphere packing", 24);
-  addImageOrPlaceholder(slide, ASSETS.spherePacking, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "Insert Gauss / sphere-packing formalization image");
   addBodyText(slide, [
     "These examples are striking because they are mathematically recognizable",
     "and because the outputs are not just prose but formal artifacts.",
     "They make the promise of autoformalization more concrete.",
-  ], { x: 7.2, y: 1.6, w: 5.05, h: 3.0, fontSize: 18 });
+  ], { x: 0.95, y: 1.5, w: 11.0, h: 1.55, fontSize: 18 });
+  addImageOrPlaceholder(slide, ASSETS.spherePacking, { x: 0.95, y: 3.3, w: 11.1, h: 2.35 }, "Insert Gauss / sphere-packing formalization image");
   slide.addText("Math, Inc.: formal verification of sphere packing in dimensions 8 and 24", {
     x: 0.95,
-    y: 5.78,
-    w: 6.5,
+    y: 5.92,
+    w: 7.2,
     h: 0.24,
     fontFace: FONTS.body,
     fontSize: 11,
@@ -817,16 +808,16 @@ function slide24() {
 function slide25() {
   const slide = pptx.addSlide();
   addTitle(slide, "Much more is happening", 25);
-  addImageOrPlaceholder(slide, ASSETS.m2fFigure, { x: 0.95, y: 1.65, w: 3.8, h: 2.5 }, "M2F figure");
-  addImageOrPlaceholder(slide, ASSETS.archon, { x: 4.98, y: 1.65, w: 3.8, h: 2.5 }, "Archon / First Proof figure");
+  addImageOrPlaceholder(slide, ASSETS.m2fFigure, { x: 0.95, y: 1.8, w: 3.8, h: 2.5 }, "Insert M2F figure");
+  addImageOrPlaceholder(slide, ASSETS.archon, { x: 5.0, y: 1.8, w: 3.8, h: 2.5 }, "Insert Archon / First Proof figure");
   addPanel(slide, "The broader point", [
     "The landscape is no longer one isolated demo.",
     "There are now several overlapping styles of verifier-in-the-loop formalization work.",
-  ], { x: 9.02, y: 1.65, w: 2.95, h: 2.5 }, COLORS.panel);
+  ], { x: 9.05, y: 1.8, w: 3.0, h: 2.5 }, COLORS.panel);
   addBodyText(slide, [
     "These are not isolated examples.",
     "Across several groups, the pace of progress this year has been unusually fast.",
-  ], { x: 1.05, y: 4.75, w: 8.8, h: 0.95, fontSize: 18 });
+  ], { x: 0.95, y: 4.75, w: 10.8, h: 0.95, fontSize: 18 });
 }
 
 function slide26() {
@@ -848,15 +839,15 @@ function slide26() {
 function slide27() {
   const slide = pptx.addSlide();
   addTitle(slide, "Serre duality: a personal experiment", 27);
-  addImageOrPlaceholder(slide, null, { x: 0.95, y: 1.45, w: 6.35, h: 4.05 }, "Insert screenshot from the Serre duality experiment");
+  addImageOrPlaceholder(slide, null, { x: 0.95, y: 1.45, w: 11.1, h: 2.75 }, "Insert screenshot from the Serre duality experiment");
   addBodyText(slide, [
     "In my own experiment, this kind of workflow was strong enough to be genuinely useful.",
     "The point was not that the system could simply be trusted.",
     "The point was that it could help produce formal mathematics that could then be checked.",
-  ], { x: 7.55, y: 1.6, w: 4.7, h: 3.0, fontSize: 18 });
+  ], { x: 0.95, y: 4.45, w: 11.0, h: 1.15, fontSize: 18 });
   addQuoteBox(slide, "If you ask whether one should trust an AI mathematician, my answer is no, not in the ordinary sense. But one can increasingly trust a workflow in which generation is coupled to real verification.", {
     x: 0.95,
-    y: 5.85,
+    y: 5.72,
     w: 11.35,
     h: 0.9,
   });
