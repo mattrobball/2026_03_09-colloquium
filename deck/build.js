@@ -22,6 +22,7 @@ const COLORS = {
 const FONTS = {
   title: "Georgia",
   body: "Arial",
+  mono: "Courier New",
 };
 
 const ASSETS = {
@@ -30,7 +31,20 @@ const ASSETS = {
   reliability: path.join(ROOT, "assets/raw-images/2602-fig1-01.png"),
   alphaSetup: path.join(ROOT, "assets/raw-images/alphaevolve-fig1-03.png"),
   alphaHighlights: path.join(ROOT, "assets/raw-images/alphaevolve-fig5-12.png"),
+  frontiermath: path.join(ROOT, "assets/raw-images/frontiermath-banner.png"),
+  spherePacking: path.join(ROOT, "assets/raw-images/math-inc-sphere-packing-og.png"),
+  urbanPaper: path.join(ROOT, "assets/raw-images/urban-paper-01.png"),
+  m2fFigure: path.join(ROOT, "assets/raw-images/m2f-fig1-02.png"),
 };
+
+const FRONTIERMATH_TIER4 = [
+  { name: "GPT-5.4 Pro (web)", score: 37.5 },
+  { name: "GPT-5.2 (Pro, Web App)", score: 31.3 },
+  { name: "GPT-5.4 (xhigh)", score: 27.1 },
+  { name: "Claude Opus 4.6 (max)", score: 22.9 },
+  { name: "Claude Opus 4.6 (64k thinking)", score: 20.8 },
+  { name: "Gemini 3 Pro Preview", score: 18.8 },
+];
 
 const pptx = new PptxGenJS();
 pptx.layout = "LAYOUT_WIDE";
@@ -207,6 +221,30 @@ function addQuoteBox(slide, text, box) {
   });
 }
 
+function addCodeBox(slide, code, box) {
+  slide.addShape(pptx.ShapeType.roundRect, {
+    x: box.x,
+    y: box.y,
+    w: box.w,
+    h: box.h,
+    rectRadius: 0.06,
+    fill: { color: "F1EEE5" },
+    line: { color: COLORS.border, pt: 1 },
+  });
+  slide.addText(code, {
+    x: box.x + 0.16,
+    y: box.y + 0.14,
+    w: box.w - 0.32,
+    h: box.h - 0.28,
+    fontFace: FONTS.mono,
+    fontSize: 13,
+    color: COLORS.text,
+    margin: 0,
+    fit: "shrink",
+    breakLine: false,
+  });
+}
+
 function addPipeline(slide, labels, y) {
   const startX = 0.95;
   const boxW = 2.15;
@@ -261,6 +299,74 @@ function addFourUp(slide, items, topY) {
   ];
   items.forEach((item, i) => {
     addPanel(slide, item.title, [item.body], boxes[i], i % 2 === 0 ? COLORS.panel : COLORS.panelAlt);
+  });
+}
+
+function addLeaderboard(slide, rows, box) {
+  slide.addShape(pptx.ShapeType.roundRect, {
+    x: box.x,
+    y: box.y,
+    w: box.w,
+    h: box.h,
+    rectRadius: 0.06,
+    fill: { color: "FFFFFF" },
+    line: { color: COLORS.border, pt: 1 },
+  });
+  slide.addText("Epoch AI Tier 4 leaderboard\nSnapshot: March 9, 2026", {
+    x: box.x + 0.18,
+    y: box.y + 0.16,
+    w: box.w - 0.36,
+    h: 0.5,
+    fontFace: FONTS.body,
+    fontSize: 14,
+    color: COLORS.muted,
+    margin: 0,
+  });
+
+  const maxScore = Math.max(...rows.map((r) => r.score));
+  rows.forEach((row, idx) => {
+    const y = box.y + 0.78 + idx * 0.58;
+    const barW = 3.4 * (row.score / maxScore);
+    slide.addText(row.name, {
+      x: box.x + 0.18,
+      y,
+      w: 2.95,
+      h: 0.18,
+      fontFace: FONTS.body,
+      fontSize: 12.5,
+      color: COLORS.text,
+      margin: 0,
+      fit: "shrink",
+    });
+    slide.addShape(pptx.ShapeType.roundRect, {
+      x: box.x + 3.18,
+      y: y + 0.02,
+      w: 3.45,
+      h: 0.22,
+      rectRadius: 0.03,
+      fill: { color: COLORS.panel },
+      line: { color: COLORS.panel, pt: 0.5 },
+    });
+    slide.addShape(pptx.ShapeType.roundRect, {
+      x: box.x + 3.18,
+      y: y + 0.02,
+      w: barW,
+      h: 0.22,
+      rectRadius: 0.03,
+      fill: { color: COLORS.accent },
+      line: { color: COLORS.accent, pt: 0.5 },
+    });
+    slide.addText(`${row.score.toFixed(1)}%`, {
+      x: box.x + 6.76,
+      y,
+      w: 0.7,
+      h: 0.18,
+      fontFace: FONTS.body,
+      fontSize: 12.5,
+      color: COLORS.text,
+      align: "right",
+      margin: 0,
+    });
   });
 }
 
@@ -367,7 +473,7 @@ function slide7() {
   const slide = pptx.addSlide();
   addTitle(slide, "Two recent tests", 7);
   addImageOrPlaceholder(slide, ASSETS.archon, { x: 0.95, y: 1.55, w: 5.15, h: 3.45 }, "First Proof image");
-  addImageOrPlaceholder(slide, null, { x: 6.3, y: 1.55, w: 5.25, h: 3.45 }, "FrontierMath image or leaderboard");
+  addImageOrPlaceholder(slide, ASSETS.frontiermath, { x: 6.3, y: 1.55, w: 5.25, h: 3.45 }, "FrontierMath image or leaderboard");
   addBodyText(slide, [
     "These two examples ask rather different questions.",
     "Together they give a useful picture of recent progress.",
@@ -388,7 +494,7 @@ function slide8() {
 function slide9() {
   const slide = pptx.addSlide();
   addTitle(slide, "FrontierMath", 9);
-  addImageOrPlaceholder(slide, null, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "Insert FrontierMath figure or Tier 4 leaderboard");
+  addImageOrPlaceholder(slide, ASSETS.frontiermath, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "Insert FrontierMath figure or Tier 4 leaderboard");
   addBodyText(slide, [
     "FrontierMath was designed to probe much harder mathematics.",
     "Its harder tiers aim beyond standard benchmark questions",
@@ -494,12 +600,12 @@ function slide11() {
 function slide12() {
   const slide = pptx.addSlide();
   addTitle(slide, "What seems to be improving", 12);
-  addImageOrPlaceholder(slide, null, { x: 0.95, y: 1.45, w: 7.0, h: 4.5 }, "Insert FrontierMath Tier 4 leaderboard");
+  addLeaderboard(slide, FRONTIERMATH_TIER4, { x: 0.95, y: 1.45, w: 7.55, h: 4.5 });
   addBodyText(slide, [
     "The systems do seem to be getting better.",
     "On hard mathematical benchmarks, the trend is plainly upward.",
     "That much is real, even if it does not settle the question of trust.",
-  ], { x: 8.2, y: 1.65, w: 4.1, h: 2.8, fontSize: 18 });
+  ], { x: 8.8, y: 1.65, w: 3.5, h: 2.8, fontSize: 18 });
 }
 
 function slide13() {
@@ -589,7 +695,22 @@ function slide19() {
     "What ultimately matters is that a small trusted kernel checks the proof.",
     "This gives a much firmer notion of correctness than persuasive prose.",
   ], { x: 0.95, y: 1.6, w: 5.55, h: 3.4, fontSize: 18 });
-  addImageOrPlaceholder(slide, null, { x: 6.75, y: 1.45, w: 5.55, h: 4.15 }, "Insert a short, legible Lean snippet");
+  addCodeBox(slide, `theorem continuous_image_compact
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {s : Set X} (hs : IsCompact s) {f : X → Y} (hf : Continuous f) :
+    IsCompact (f '' s) := by
+  exact hs.image hf`, { x: 6.75, y: 1.55, w: 5.55, h: 3.55 });
+  slide.addText("A recognizable theorem, but stated with all ambient structure made explicit.", {
+    x: 6.9,
+    y: 5.35,
+    w: 5.1,
+    h: 0.45,
+    fontFace: FONTS.body,
+    fontSize: 13,
+    color: COLORS.muted,
+    italic: true,
+    margin: 0,
+  });
 }
 
 function slide20() {
@@ -637,37 +758,54 @@ function slide22() {
 function slide23() {
   const slide = pptx.addSlide();
   addTitle(slide, "Urban and Megalodon", 23);
-  addImageOrPlaceholder(slide, null, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "Insert Urban / Megalodon figure or workflow image");
+  addImageOrPlaceholder(slide, ASSETS.urbanPaper, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "Insert Urban / Megalodon figure or workflow image");
   addBodyText(slide, [
     "This is one of the clearest recent demonstrations of serious autoformalization.",
     "The workflow is no longer merely aspirational.",
     "Strong models can now support a substantial formalization loop.",
   ], { x: 7.2, y: 1.6, w: 5.05, h: 3.0, fontSize: 18 });
+  slide.addText("Josef Urban, “130k Lines of Formal Topology in Two Weeks”", {
+    x: 0.95,
+    y: 5.78,
+    w: 6.2,
+    h: 0.24,
+    fontFace: FONTS.body,
+    fontSize: 11,
+    color: COLORS.muted,
+    margin: 0,
+  });
 }
 
 function slide24() {
   const slide = pptx.addSlide();
   addTitle(slide, "Gauss and sphere packing", 24);
-  addImageOrPlaceholder(slide, null, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "Insert Gauss / sphere-packing formalization image");
+  addImageOrPlaceholder(slide, ASSETS.spherePacking, { x: 0.95, y: 1.45, w: 6.0, h: 4.2 }, "Insert Gauss / sphere-packing formalization image");
   addBodyText(slide, [
     "These examples are striking because they are mathematically recognizable",
     "and because the outputs are not just prose but formal artifacts.",
     "They make the promise of autoformalization more concrete.",
   ], { x: 7.2, y: 1.6, w: 5.05, h: 3.0, fontSize: 18 });
+  slide.addText("Math, Inc.: formal verification of sphere packing in dimensions 8 and 24", {
+    x: 0.95,
+    y: 5.78,
+    w: 6.5,
+    h: 0.24,
+    fontFace: FONTS.body,
+    fontSize: 11,
+    color: COLORS.muted,
+    margin: 0,
+  });
 }
 
 function slide25() {
   const slide = pptx.addSlide();
   addTitle(slide, "Much more is happening", 25);
-  addPanel(slide, "Recent autoformalization paper", [
-    "Insert small figure or screenshot and one short caption.",
-  ], { x: 0.95, y: 1.75, w: 3.65, h: 2.2 }, COLORS.panel);
-  addPanel(slide, "Archon / First Proof", [
-    "Insert small figure or screenshot and one short caption.",
-  ], { x: 4.84, y: 1.75, w: 3.65, h: 2.2 }, COLORS.panelAlt);
-  addPanel(slide, "Another 2026 example", [
-    "Reserve space if a third small panel is useful.",
-  ], { x: 8.73, y: 1.75, w: 3.0, h: 2.2 }, COLORS.panel);
+  addImageOrPlaceholder(slide, ASSETS.m2fFigure, { x: 0.95, y: 1.65, w: 3.8, h: 2.5 }, "M2F figure");
+  addImageOrPlaceholder(slide, ASSETS.archon, { x: 4.98, y: 1.65, w: 3.8, h: 2.5 }, "Archon / First Proof figure");
+  addPanel(slide, "The broader point", [
+    "The landscape is no longer one isolated demo.",
+    "There are now several overlapping styles of verifier-in-the-loop formalization work.",
+  ], { x: 9.02, y: 1.65, w: 2.95, h: 2.5 }, COLORS.panel);
   addBodyText(slide, [
     "These are not isolated examples.",
     "Across several groups, the pace of progress this year has been unusually fast.",
@@ -677,12 +815,17 @@ function slide25() {
 function slide26() {
   const slide = pptx.addSlide();
   addTitle(slide, "The Claude Code moment", 26);
-  addImageOrPlaceholder(slide, null, { x: 0.95, y: 1.45, w: 5.7, h: 4.15 }, "Insert representative Claude Code screenshots or a simpler custom diagram");
+  addPanel(slide, "What changed", [
+    "Off-the-shelf coding agents became good enough to sustain a real edit / run / repair loop.",
+  ], { x: 0.95, y: 1.55, w: 5.45, h: 1.55 }, COLORS.panelAlt);
   addPanel(slide, "Threshold claim", [
     "Recent coding-oriented models made these workflows much more accessible in practice.",
     "One no longer needs a highly specialized system to begin trying serious experiments.",
   ], { x: 7.0, y: 1.55, w: 5.3, h: 2.65 }, COLORS.panelAlt);
-  addPipeline(slide, ["off-the-shelf model", "coding loop", "Lean feedback"], 4.65);
+  addPipeline(slide, ["off-the-shelf model", "edit / run loop", "Lean feedback", "local repair"], 4.3);
+  addBodyText(slide, [
+    "This is why Urban-style experiments suddenly became plausible for ordinary users.",
+  ], { x: 1.05, y: 3.55, w: 5.8, h: 0.75, fontSize: 17, italic: true });
 }
 
 function slide27() {

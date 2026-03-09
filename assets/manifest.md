@@ -26,26 +26,46 @@
   - Rendered page: 12
   - Used for: Slide 17
 
+- `assets/raw-images/frontiermath-banner.png`
+  - Source: `https://epoch.ai/legacy_assets/images/frontiermath-banner.png`
+  - Used for: Slides 7 and 9
+
+- `assets/raw-images/math-inc-sphere-packing-og.png`
+  - Source: `https://math.inc/og.png`
+  - Used for: Slide 24
+
+- `assets/raw-images/urban-paper-01.png`
+  - Source PDF: `https://arxiv.org/pdf/2601.03298`
+  - Rendered page: 1
+  - Used for: Slide 23
+
+- `assets/raw-images/m2f-fig1-02.png`
+  - Source PDF: `https://arxiv.org/pdf/2602.17016`
+  - Rendered page: 2
+  - Used for: Slide 25
+
 ## Source documents downloaded
 
 - `assets/source-pdfs/2407.21787.pdf`
 - `assets/source-pdfs/2602.16666v1.pdf`
 - `assets/source-pdfs/AlphaEvolve.pdf`
+- `assets/source-pdfs/2601.03298.pdf`
+- `assets/source-pdfs/2602.17016.pdf`
 - `assets/source-html/archon-firstproof.html`
+- `assets/source-html/frontiermath.html`
+- `assets/source-html/frontiermath-chart.js`
+- `assets/source-html/epoch-benchmark-page.js`
+- `assets/source-html/epoch-benchmarks.json`
+- `assets/source-html/epoch-benchmarks.csv`
+- `assets/source-html/epoch-leaderboard.js`
+- `assets/source-html/sphere-packing.html`
 
 ## Slides still using placeholders
 
-- Slide 9: FrontierMath main figure
-- Slide 12: FrontierMath Tier 4 leaderboard
-- Slide 19: short Lean snippet
 - Slide 21: formal statement / definition example
-- Slide 23: Urban / Megalodon figure
-- Slide 24: Gauss / sphere-packing figure
-- Slide 25: smaller survey panels
-- Slide 26: Claude Code screenshots or substitute diagram
 - Slide 27: Serre duality experiment screenshot
 
 ## Notes
 
 - The first-pass deck is intentionally usable with placeholders so the structure can be reviewed immediately.
-- The next asset pass should focus on Slides 9, 12, 23, 24, 26, and 27.
+- The main missing public-source content is now down to Slide 21; Slide 27 still depends on user-provided material.
