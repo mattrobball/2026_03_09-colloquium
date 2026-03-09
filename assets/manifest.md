@@ -62,10 +62,9 @@
 
 ## Slides still using placeholders
 
-- Slide 21: formal statement / definition example
 - Slide 27: Serre duality experiment screenshot
 
 ## Notes
 
-- The first-pass deck is intentionally usable with placeholders so the structure can be reviewed immediately.
-- The main missing public-source content is now down to Slide 21; Slide 27 still depends on user-provided material.
+- The main remaining content gap is now Slide 27, which depends on user-provided material.
+- Slide 21 now uses a real theorem statement from the public `math-inc/Sphere-Packing-Lean` repository.

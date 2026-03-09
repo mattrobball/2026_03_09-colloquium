@@ -730,12 +730,29 @@ function slide20() {
 function slide21() {
   const slide = pptx.addSlide();
   addTitle(slide, "What formalization does not give you", 21);
-  addImageOrPlaceholder(slide, null, { x: 0.95, y: 1.45, w: 5.85, h: 4.25 }, "Insert formal statement / definition example whose syntax obscures its meaning");
+  addCodeBox(slide, `public theorem MainTheorem :
+    SpherePackingConstant 24 = Dim24.LeechPacking.density ∧
+      ∀ S : PeriodicSpherePacking 24,
+        S.density = Dim24.LeechPacking.density →
+          Dim24.IsometricToScaledLeech S := by`, { x: 0.95, y: 1.5, w: 5.85, h: 2.2 });
+  addPanel(slide, "Informal translation", [
+    "In dimension 24, the optimal density is the Leech lattice density, and any periodic packing of that density is the same up to scaling and isometry.",
+  ], { x: 0.95, y: 4.0, w: 5.85, h: 1.55 }, COLORS.panelAlt);
   addBodyText(slide, [
     "A verified proof is only as good as the statement that was formalized.",
     "One still has to check definitions, hypotheses, and the actual claim being proved.",
     "Formal syntax can obscure these things rather than clarify them.",
   ], { x: 7.05, y: 1.6, w: 5.2, h: 3.0, fontSize: 18 });
+  slide.addText("Example drawn from the public Sphere-Packing-Lean repository.", {
+    x: 0.95,
+    y: 5.78,
+    w: 5.9,
+    h: 0.22,
+    fontFace: FONTS.body,
+    fontSize: 11,
+    color: COLORS.muted,
+    margin: 0,
+  });
 }
 
 function slide22() {
